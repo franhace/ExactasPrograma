@@ -10,8 +10,8 @@ def crear_mazo():
     a = 0
     cartas = []
     while a < 4:
-        for c in range(1, 14):
-            cartas.append(c)
+        for car in range(1, 14):
+            cartas.append(car)
         a = a + 1
     return cartas
 
@@ -22,7 +22,7 @@ def generar_mazos(n):
 
     a = 0
     mazo = crear_mazo()
-    c = 0
+
     mazo_mezclado = []
 
     while a < n:
@@ -50,7 +50,6 @@ def jugar(m):
         # if len(m) <= 0: # QUE PASA SI NOS QUEDAMOS SIN CARTAS
         #     print(0)
         #     break
-
 
         while s < 21:
             r = m.pop(c)  # saca carta seleccionada
