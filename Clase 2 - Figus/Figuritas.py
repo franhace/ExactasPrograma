@@ -90,6 +90,7 @@ def cuantos_paquetes(figus_total, figus_paquete):
 def promedio_paquetes(n_repeticiones, figus_total, figus_paquete):
     i = 0
     rep = []
+    # lleno = False y cambiarlo en vez de "n_repeticiones" -> while not lleno
     while i < n_repeticiones:
         rep.append(cuantos_paquetes(figus_total, figus_paquete))
         i += 1
@@ -100,7 +101,7 @@ def promedio_paquetes(n_repeticiones, figus_total, figus_paquete):
 
 # Funcion que devuelve el porcentaje de alb completados con 850 paquetes o menos
 
-def promedio_850(n_repeticiones, figus_total, figus_paquete):
+def promedio_850(n_repeticiones=10, figus_total=669, figus_paquete=5):
     i = 0  # cuenta repeticiones totales
     rep = []  # lista de paquetes totales sacados para completar alb
     s = []  # lista de alb completados con 850 paquetes o menos
@@ -112,26 +113,24 @@ def promedio_850(n_repeticiones, figus_total, figus_paquete):
         if numpak <= 850:
             s.append(numpak)
             t += 1
+    print t
+    print("i: {}".format(i))
+    print rep
+    promedio = (t // i )
 
-    # print("i: {}".format(i))
-    promedio = t / i * 100
-    print(promedio)
-    print(s)
+    return promedio
 
-    return int(promedio)
-
-x = (promedio_850(n_repeticiones=15, figus_total=669, figus_paquete=5))
-
+print promedio_850(n_repeticiones=10, figus_total=669, figus_paquete=5)
 # Funcion que se fija cuantas repeticion habria que hacer para que
 # las chances de completar el album con 850 figuritas sea mayor al 90%
-
-def cuantos_paq_90p():
-
-    z = 1
-    while (promedio_850(n_repeticiones=z, figus_total=669, figus_paquete=5)) < 90:
-        z += 1
-        print(z)
-    return z
-
-print(cuantos_paq_90p())
-
+#
+# def cuantos_paq_90p():
+#
+#     z = 100
+#     while (promedio_850(n_repeticiones=z, figus_total=669, figus_paquete=5)) < 90:
+#         z += 1
+#         print(z)
+#     return z
+#
+# print(cuantos_paq_90p())
+#
