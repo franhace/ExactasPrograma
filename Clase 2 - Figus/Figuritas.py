@@ -113,14 +113,14 @@ def promedio_850(n_repeticiones=10, figus_total=669, figus_paquete=5):
         if numpak <= 850:
             s.append(numpak)
             t += 1
-    print t
+    print (t)
     print("i: {}".format(i))
-    print rep
-    promedio = (t // i )
+    print (rep)
+    promedio = (t / i ) * 100
 
     return promedio
 
-print promedio_850(n_repeticiones=10, figus_total=669, figus_paquete=5)
+print (promedio_850(n_repeticiones=10, figus_total=669, figus_paquete=5))
 # Funcion que se fija cuantas repeticion habria que hacer para que
 # las chances de completar el album con 850 figuritas sea mayor al 90%
 #
