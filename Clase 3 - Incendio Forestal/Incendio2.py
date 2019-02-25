@@ -14,12 +14,14 @@ def bosque_vacio(n):
         bosquecito.append(i)
     return bosquecito
 
+
 def bosque_limpio(n):
     bosquecito = []
     x = np.random.randint(0, 2, size=n)
     for i in x:
         bosquecito.append(i)
     return bosquecito
+
 
 def bosque_quemado(n):
     bosquecito = []
@@ -42,6 +44,8 @@ def suceso_aleatorio(prob):
     else:
         i = False
     return i
+
+
 # print(suceso_aleatorio(prob=0.6))
 
 
@@ -50,7 +54,6 @@ def suceso_aleatorio(prob):
 # en cada celda vacia con probabilidad p
 
 def brotes(bosque, p):
-    
     cont = 0
 
     for i in range(0, len(bosque)):
@@ -66,15 +69,16 @@ def brotes(bosque, p):
 # vacio o quemado
 
 def cuantos(bosque, tipo_celda):
+    x = bosque.count(tipo_celda)
+    # print("hay {} arboles de tipo {}".format(x, tipo_celda))
+    return x
 
-   x = bosque.count(tipo_celda)
-   # print("hay {} arboles de tipo {}".format(x, tipo_celda))
-   return x
 
-f =0.02
+f = 0.02
+
+
 # Funcion que hace caer rayos sobre el bosque con probabilidad f
 def rayos(bosque, f):
-    
     count = 0
     for i in range(0, len(bosque)):
         if suceso_aleatorio(f) == False:
@@ -87,20 +91,21 @@ def rayos(bosque, f):
 
 def propagacion(bosque):
     count = 0
-    for i in range(0, len(bosque)-1):
+    for i in range(0, len(bosque) - 1):
         if bosque[i] == -1:
-            if bosque[i+1] == 1:
-                bosque[i+1] = -1
+            if bosque[i + 1] == 1:
+                bosque[i + 1] = -1
                 count += 1
     bosque.reverse()
     for i in range(0, len(bosque) - 1):
         if bosque[i] == -1:
-            if bosque[i+1] == 1:
-                bosque[i+1] = -1
+            if bosque[i + 1] == 1:
+                bosque[i + 1] = -1
                 count += 1
     bosque.reverse()
     # print("{} arboles fueron quemados por propagacion".format(count))
     return bosque
+
 
 # w = cuantos(bosque, tipo_celda=1), cuantos(bosque, tipo_celda=0), cuantos(bosque, tipo_celda=-1)
 
@@ -117,11 +122,10 @@ def limpieza(bosque):
     return bosque
 
 
+# Funcion que toma "n_rep" años y va ciclando por el mismo bosque durante
+# esos años y nos devuelve el promedio de arboles que sobrevivieron.
 
-# Funcion que toma "n_rep" anos y va ciclando por el mismo bosque durante
-# esos anos y nos devuelve el promedio de arboles que sobrevivieron.
-
-# Durante estos anos hay 4 eventos que son:
+# Durante estos años hay 4 eventos que son:
 # Primavera -> brota arboles con probabilidad "p"
 # Rayos -> hace caer rayos con probabilidad "f"
 # Propaga -> propaga el fuego desde arboles quemados a los contiguos
@@ -130,23 +134,22 @@ def limpieza(bosque):
 
 
 def incendio_forestal(anios, p):
-
     f = 0.4  # proba de electrocucion
-    t = 0 # Ao
+    t = 0  # Año
     l1 = []  # lista de numero de arboles que sobrevivieron
-    l2 = [] # lista de p's
+    l2 = []  # lista de p's
 
     foret = bosque_vacio(n=1000)
 
     while t < anios:
-        # print("\n Ano {} \n".format(t))
+        # print("\n Año {} \n".format(t))
         t += 1
         # p = random.random()
 
         l2.append(p)
 
         brotes(foret, p)
-        
+
         rayos(foret, f)
 
         propagacion(foret)
@@ -157,32 +160,33 @@ def incendio_forestal(anios, p):
 
         l1.append(x)
 
-        # print("Este ao {} sobrevivieron {} arboles".format(t, x))
+        # print("Este año {} sobrevivieron {} arboles".format(t, x))
 
     w = max(l1)
     z = l1.index(w)
     # print("\nmaximo numero de arboles: {}\n"
-    #       "An: {}\n"
+    #       "Año: {}\n"
     #       "p = {} \n".format(w, z, l2[z]))
 
     return l1
 
 
-# print("\n Sobrevivieron en promedio {} arboles por ao \n".format(incendio_forestal(n_rep)))
+# print("\n Sobrevivieron en promedio {} arboles por año \n".format(incendio_forestal(n_rep)))
 
 # print(incendio_forestal(anios, p))
 
 # Funcion que dependiendo de la facilidad "f" de un bosque para prenderse
 # fuego, nos devuelve el valor optimo de arboles que deberian nacer por
-# # ao
+# # año
 # # f= 0.02
-muestra = 1000 #"vuelta" que equivale a p's crecientes que toma, para distintos bosques
-anios = 10 # numero de aos que va a tener un bosque
+muestra = 1000  # "vuelta" que equivale a p's crecientes que toma, para distintos bosques
+anios = 10  # numero de años que va a tener un bosque
+
 
 def valor_optimo(muestra, anios):
     i = 0
-    l1 = [] # cantidad de total de arboles que sobrevivieron por vuelta
-    l2 = [] # p por vuelta
+    l1 = []  # cantidad de total de arboles que sobrevivieron por vuelta
+    l2 = []  # p por vuelta
     p = 0.01
     while i < muestra and p < 0.99999:
         # print("vuelta {}".format(i))
@@ -199,11 +203,11 @@ def valor_optimo(muestra, anios):
     # plt.plot(l1)
     # plt.plot(l2)
     # plt.subplot(222)
-        # (interpolate.splrep(l2, l1, s))
+    # (interpolate.splrep(l2, l1, s))
     print(len(l1))
 
-
     return l2
+
 
 print(valor_optimo(muestra, anios))
 
