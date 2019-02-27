@@ -48,6 +48,7 @@ distancias = []
 fuerza_x = []
 fuerza_y = []
 fuerza_total = []
+velocidad_final = []
 def orbit():
     for i in range(1, tiempo_total - 1):
 
@@ -79,8 +80,14 @@ def orbit():
         y_tierra.append(y_nueva)
 
         # Fuerza tot
-        s = f_x + f_y
+        s = (f_x**2 + f_y**2)**0.5
         fuerza_total.append(s)
+
+        # Velocidad
+        Vfx = (x_nueva - x_actual) / dt
+        Vfy = (y_nueva - y_actual) / dt
+        Vf = (Vfx**2 + Vfy**2)**0.5
+        velocidad_final.append(Vf)
 
         # Actualizo el tiempo
         dias.append(i)
@@ -91,35 +98,45 @@ def orbit():
 
     return distancias
 
+
 print(orbit())
 
-#
-# R = (max(orbit())+min(orbit())/2)
-# print(R)
-# yies = []
-# for i in range(0, int(R)):
-#     y = (R**2 - i**2)**0.5
-#
-#     yies.append(y)
-# plt.plot(yies)
-# print()
+
+R = (max(orbit())+min(orbit())/2)
+yies = []
+for x in range(0, int(R), int(int(R)/50)):
+    y = (R**2 - x**2)**0.5
+    yies.append(y)
+for x in range(0, int(R), int(int(R) / 50)):
+    y = ((R ** 2 - x ** 2) ** 0.5)*(-1)
+    yies.append(y)
+for x in range(-int(R), 0, int(int(R) / 50)):
+    y = ((R ** 2 - x ** 2) ** 0.5)*(-1)
+    yies.append(y)
+for x in range(-int(R), 0, int(int(R)/50)):
+    y = (R**2 - x**2)**0.5
+    yies.append(y)
+yies.sort()
+plt.plot(yies)
+print(yies)
 
 
-
-
-print(fuerza_total)
-plt.subplot2grid((2, 3), (0, 0))
-plt.title("Elipse")
-plt.xlabel("Dias")
-plt.ylabel("Distancia sol-tierra")
+plt.subplot2grid((1, 3), (0, 0))
+plt.title("Rel posicion x-y")
+plt.xlabel("X")
+plt.ylabel("Y")
 plt.plot(x_tierra, y_tierra)
 # plt.plot(fuerza_x)
 # plt.plot(fuerza_y)
-plt.subplot2grid((2, 3), (0, 2))
-plt.title("Elipse")
+plt.subplot2grid((1, 3), (0, 2))
+plt.title("Fuerza - Dia")
 plt.xlabel("Dias")
-plt.ylabel("Distancia sol-tierra")
+plt.ylabel("Fuerza")
 plt.plot(fuerza_total)
-
+plt.subplot2grid((1, 3), (0, 1))
+plt.title("Variacion velocidad con los dias")
+plt.xlabel("Dias")
+plt.ylabel("Velocidad")
+plt.plot(velocidad_final)
 plt.show()
 
