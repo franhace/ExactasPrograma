@@ -31,6 +31,16 @@ from scipy import constants
 #     print(tiempos[-1])
 #     return alturas[-1]
 #
+# i = 1
+# n-p = 0
+# while y0 <= n-p:
+#     yp = alturas [i- 1]
+#     ya  = alturas [i]
+#       n-p =
+#     i = i + 1
+# alturas. append (n-p)
+# return i
+
 # print(actualiz())
 
 x_tierra = [-147095000000.0, -147095000000.0]
@@ -120,12 +130,12 @@ yies.sort()
 plt.plot(yies)
 print(yies)
 
-
+plt.plot(x_sol, y_sol, 'ko')
 plt.subplot2grid((1, 3), (0, 0))
 plt.title("Rel posicion x-y")
 plt.xlabel("X")
 plt.ylabel("Y")
-plt.plot(x_tierra, y_tierra)
+plt.plot(x_tierra, y_tierra, 'r')
 # plt.plot(fuerza_x)
 # plt.plot(fuerza_y)
 plt.subplot2grid((1, 3), (0, 2))
