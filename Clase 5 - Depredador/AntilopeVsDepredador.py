@@ -1,5 +1,6 @@
 import numpy as np
 import random
+import csv
 
 # Funcion que genera un tablero de "filas" filas y "columnas" columnas
 # Luego le agrega montanas en los bordes
@@ -20,10 +21,10 @@ def generar_tablero(filas, columnas):
     n_col = tablero.shape[1]
 
     # Crear montanas
-    tablero[0, :n_col] = 'M'
-    tablero[:n_col, 0] = 'M'
-    tablero[:, n_col - 1] = 'M'
-    tablero[n_fila - 1, :n_col] = 'M'
+    tablero[0, :] = 'M'
+    tablero[:, 0] = 'M'
+    tablero[:, -1] = 'M'
+    tablero[- 1, :] = 'M'
 
     return tablero
 
@@ -38,11 +39,8 @@ tablero = generar_tablero(filas=4, columnas=6)
 
 # Hace que los bordes del tablero sean montanas "M" o numeros
 
-
 n_fila = tablero.shape[0]
 n_col = tablero.shape[1]
-
-
 
 # Definimos la coordenadas de nuestros personajes
 # Hacer funcion que ubique "n" numero de personajes de cada tipo, por "coord"
@@ -74,7 +72,6 @@ def mis_vecinos(coord_centro):
 # que busca un tipo de valor del casillero
 # si no existiera dicho objetivo buscado, devuelve una lista vacia
 
-
 def buscar_adyacente(tablero, coord_centro, objetivo):
 
     adyacente = []
@@ -93,14 +90,13 @@ def recorrer_tablero(tablero):
     n_fila = tablero.shape[0]
     n_col = tablero.shape[1]
     centros = []
-    for i in range(1, n_fila - 1):
+    for i in range(1, n_fila -1):
         for j in range(1, n_col - 1):
             coord_centro = (i, j)
             centros.append(coord_centro)
     return centros
 
-
-# print(recorrer_tablero(tablero))
+print(recorrer_tablero(tablero))
 
 
 def fase_mover(tablero):
@@ -150,7 +146,7 @@ def fase_reproduccion(tablero):
                         if len(z) != 0:
                             tablero[z[0]] = letra
                             # print("Posicion libre {}".format(z))
-                            tablero[w[0]] = letra
+
 
     for coord_centro in recorrer_tablero(tablero):
         if tablero[coord_centro] == "L":
@@ -167,7 +163,7 @@ def fase_reproduccion(tablero):
                         if len(z) != 0:
                             tablero[z[0]] = letra
                             # print("Posicion libre {}".format(z))
-                            tablero[w[0]] = letra
+
     return tablero
 
 # print("\n Reproduccion \n \n {}".format(fase_reproduccion(tablero)))
@@ -175,12 +171,12 @@ def fase_reproduccion(tablero):
 
 def evolucionar(tablero):
 
-    fase_alimentacion(tablero)
-    print "\n Ali \n {}".format(fase_alimentacion(tablero))
-    fase_reproduccion(tablero)
-    print "\n Repr \n {}".format(fase_reproduccion(tablero))
-    fase_mover(tablero)
-    print "\n Mover \n {}".format(fase_mover(tablero))
+    tablero = fase_alimentacion(tablero)
+    # print "\n Ali \n {}".format(tablero)
+    tablero = fase_reproduccion(tablero)
+    # print "\n Repr \n {}".format(tablero)
+    tablero = fase_mover(tablero)
+    # print "\n Mover \n {}".format(tablero)
 
     return tablero
 
@@ -260,42 +256,42 @@ def mezclar_celdas(tablero):
 
 
 def generar_tablero_azar(filas, columnas, n_antilopes, n_leones):
+
     tab = generar_tablero(filas, columnas)
     azar = mezclar_celdas(tab)
-
+    # print azar
     for i in azar[:n_antilopes]:
         n = 0
         while n < n_antilopes:
             n += 1
             tab[i] = 'A'
-
+    # print azar[:n_antilopes]
     for s in azar[n_antilopes:n_antilopes+n_leones]:
         l = 0
         while l < n_leones:
             l += 1
             tab[s] = 'L'
-
+    # print azar[n_antilopes:n_antilopes+n_leones]
     return tab
 
 # print cuantos_de_cada(tablero1)
 
 
-tablerox = generar_tablero_azar(filas=10, columnas=10, n_antilopes=10, n_leones=5)
+tablerox = generar_tablero_azar(filas=10, columnas=6, n_antilopes=10, n_leones=2)
 print tablerox
 
 
 def registrar_evolucion(tablerox, tiempo_limite):
     n = 0
-    l2 = []
-    l2.append(cuantos_de_cada(tablerox))
+    l2 = [cuantos_de_cada(tablerox)]
+
     while n < tiempo_limite:
         n += 1
         evolucionar_en_el_tiempo(tablerox, tiempo_limite)
         l2.append(cuantos_de_cada(tablerox))
-        print tablerox
     return l2
 
-print(registrar_evolucion(tablerox, tiempo_limite=1))
+print(registrar_evolucion(tablerox, tiempo_limite=100))
 
 
 # print tablero
