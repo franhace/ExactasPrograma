@@ -1,6 +1,33 @@
 import numpy as np
-t = np . repeat("-", 7*7) . reshape(7, 7) # completa el array con valor entre ""
-# podemos verlo con:
+import random
+
+# Funcion que genera un tablero de "filas" filas y "columnas" columnas
+# Luego le agrega montanas en los bordes
+
+
+def generar_tablero(filas, columnas):
+
+    # Creamos tablero
+    x = filas
+    y = columnas
+    numero_de_casilleros_activos_en_x = x + 2
+    numero_de_casilleros_activos_en_y = y + 2
+
+    tablero = np . repeat("-", numero_de_casilleros_activos_en_x*numero_de_casilleros_activos_en_y) . \
+        reshape(numero_de_casilleros_activos_en_x, numero_de_casilleros_activos_en_y) # completa el array con valor entre ""
+
+    n_fila = tablero.shape[0]
+    n_col = tablero.shape[1]
+
+    # Crear montanas
+    tablero[0, :n_col] = 'M'
+    tablero[:n_col, 0] = 'M'
+    tablero[:, n_col - 1] = 'M'
+    tablero[n_fila - 1, :n_col] = 'M'
+
+    return tablero
+
+tablero = generar_tablero(filas=4, columnas=6)
 
 # # podemos acceder a un elemento individual por su fila y columna :
 # print ( " La posicion (1,1) tiene el elemento : ", t[(1, 2)])
@@ -9,24 +36,23 @@ t = np . repeat("-", 7*7) . reshape(7, 7) # completa el array con valor entre ""
 # # como el tablero tiene dos dimensiones , podemos accederlas como :
 # print (" Mi tablero tiene ", t . shape[0], "filas y", t . shape [1] , "columnas" )
 
-# Hace que los bordes del tablero sean montañas "M" o numeros
+# Hace que los bordes del tablero sean montanas "M" o numeros
 
-t[0, :] = range(0, 7)
-t[6, :] = range(0, 7)
-t[:, 0] = range(0, 7)
-t[:, 6] = range(0, 7)
+
+n_fila = tablero.shape[0]
+n_col = tablero.shape[1]
+
+
 
 # Definimos la coordenadas de nuestros personajes
+# Hacer funcion que ubique "n" numero de personajes de cada tipo, por "coord"
 
-x = [1, 2, 3, 3, 4, 1]
-y = [3, 1, 1, 3, 2,  2]
-tipo = ["A", "A", "A", "A", "A", "L"]
-# Los asignamos dentro del tablero
-for i in range(len(tipo)):
-    t[(x[i], y[i])] = tipo[i]
-tablero = t
-print(tablero)
-
+# x = [2, 3, 4, 4, 2]
+# y = [2, 3, 3, 5, 5]
+# tipo = ["A", "A", "A", "L", "L"]
+# # Los asignamos dentro del tablero
+# for i in range(len(tipo)):
+#     tablero[(x[i], y[i])] = tipo[i]
 
 # Funcion que toma como entrada un posicion "coord_centro" y devuelve
 # una lista con las 8 coordenadas adyacentes, en sentido horario, empezando
@@ -119,20 +145,43 @@ def fase_reproduccion(tablero):
                 if tablero[w[0]] == objetivo:
                     if tablero[coord_centro]:
                         objetivo2 = "-"
+                        # z busca lugar vacio
                         z = buscar_adyacente(tablero, coord_centro, objetivo2)
-                        tablero[z[0]] = letra
-                        # print("Posicion libre {}".format(z))
-                        tablero[w[0]] = letra
+                        if len(z) != 0:
+                            tablero[z[0]] = letra
+                            # print("Posicion libre {}".format(z))
+                            tablero[w[0]] = letra
 
+    for coord_centro in recorrer_tablero(tablero):
+        if tablero[coord_centro] == "L":
+            objetivo = "L"
+            letra = tablero[coord_centro]
+            w = buscar_adyacente(tablero, coord_centro, objetivo)
+            # print("Mate {}".format(w))
+            if len(w) != 0:
+                if tablero[w[0]] == objetivo:
+                    if tablero[coord_centro]:
+                        objetivo2 = "-"
+                        # z busca lugar vacio
+                        z = buscar_adyacente(tablero, coord_centro, objetivo2)
+                        if len(z) != 0:
+                            tablero[z[0]] = letra
+                            # print("Posicion libre {}".format(z))
+                            tablero[w[0]] = letra
     return tablero
 
 # print("\n Reproduccion \n \n {}".format(fase_reproduccion(tablero)))
 
 
 def evolucionar(tablero):
-    fase_mover(tablero)
+
     fase_alimentacion(tablero)
+    print "\n Ali \n {}".format(fase_alimentacion(tablero))
     fase_reproduccion(tablero)
+    print "\n Repr \n {}".format(fase_reproduccion(tablero))
+    fase_mover(tablero)
+    print "\n Mover \n {}".format(fase_mover(tablero))
+
     return tablero
 
 # print(evolucionar(tablero))
@@ -145,4 +194,135 @@ def evolucionar_en_el_tiempo(tablero, tiempo_limite):
     return tablero
 
 
-print(evolucionar_en_el_tiempo(tablero, tiempo_limite=2))
+# print(evolucionar_en_el_tiempo(tablero, tiempo_limite=1))
+
+
+def cuantos_antilopes(tablero):
+    count = 0
+    for coord_centro in recorrer_tablero(tablero):
+        if tablero[coord_centro] == "A":
+            count += 1
+    if count == 0:
+        print "No hay antilopes"
+    # print "\n hay {} antilopes".format(count)
+    return count
+
+# print cuantos_antilopes(tablero)
+
+def cuantos_leones(tablero):
+    count = 0
+    for coord_centro in recorrer_tablero(tablero):
+        if tablero[coord_centro] == "L":
+            count += 1
+    if count == 0:
+        print "No hay leones"
+    # print "\n Hay {} leones.".format(count)
+    return count
+
+# print cuantos_leones(tablero)
+
+def cuantos_vacios(tablero):
+    num = 0
+    for coord_centro in recorrer_tablero(tablero):
+        if tablero[coord_centro] == "-":
+            num += 1
+    if num == 0:
+        print "\n No hay lugares vacios"
+    else:
+        print "\n Hay {} lugares vacios".format(num)
+    return num
+
+# print cuantos_vacios(tablero)
+
+def cuantos_de_cada(tablero):
+    l1 = []
+    l1.append(cuantos_antilopes(tablero))
+    l1.append(cuantos_leones(tablero))
+
+    return l1
+
+# print cuantos(tablero)
+
+def mezclar_celdas(tablero):
+    celdas = []
+    n_fila = tablero.shape[0]
+    n_col = tablero.shape[1]
+    for i in range(1, n_fila - 1):
+        for j in range(1, n_col - 1):
+            celdas . append((i, j))
+            # Ahora las mezclamos
+    random . shuffle(celdas)
+    return celdas
+
+# print mezclar_celdas(tablero)
+
+# Funcion que genera un tablero al azar
+
+
+def generar_tablero_azar(filas, columnas, n_antilopes, n_leones):
+    tab = generar_tablero(filas, columnas)
+    azar = mezclar_celdas(tab)
+
+    for i in azar[:n_antilopes]:
+        n = 0
+        while n < n_antilopes:
+            n += 1
+            tab[i] = 'A'
+
+    for s in azar[n_antilopes:n_antilopes+n_leones]:
+        l = 0
+        while l < n_leones:
+            l += 1
+            tab[s] = 'L'
+
+    return tab
+
+# print cuantos_de_cada(tablero1)
+
+
+tablerox = generar_tablero_azar(filas=10, columnas=10, n_antilopes=10, n_leones=5)
+print tablerox
+
+
+def registrar_evolucion(tablerox, tiempo_limite):
+    n = 0
+    l2 = []
+    l2.append(cuantos_de_cada(tablerox))
+    while n < tiempo_limite:
+        n += 1
+        evolucionar_en_el_tiempo(tablerox, tiempo_limite)
+        l2.append(cuantos_de_cada(tablerox))
+        print tablerox
+    return l2
+
+print(registrar_evolucion(tablerox, tiempo_limite=1))
+
+
+# print tablero
+# print("\n Alimentacion \n \n {}".format(fase_alimentacion(tablero)))
+# print("\n Reproduccion \n \n {}".format(fase_reproduccion(tablero)))
+# print("\n Movimiento \n \n{}".format(fase_mover(tablero)))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
