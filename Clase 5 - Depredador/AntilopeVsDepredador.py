@@ -9,13 +9,15 @@ t = np . repeat("-", 7*7) . reshape(7, 7) # completa el array con valor entre ""
 # # como el tablero tiene dos dimensiones , podemos accederlas como :
 # print (" Mi tablero tiene ", t . shape[0], "filas y", t . shape [1] , "columnas" )
 
-# Hace que los bordes del tablero sean montañas "M"
+# Hace que los bordes del tablero sean montañas "M" o numeros
+
 t[0, :] = range(0, 7)
 t[6, :] = range(0, 7)
 t[:, 0] = range(0, 7)
 t[:, 6] = range(0, 7)
 
 # Definimos la coordenadas de nuestros personajes
+
 x = [1, 2, 3, 3, 4, 1]
 y = [3, 1, 1, 3, 2,  2]
 tipo = ["A", "A", "A", "A", "A", "L"]
@@ -25,9 +27,11 @@ for i in range(len(tipo)):
 tablero = t
 print(tablero)
 
+
 # Funcion que toma como entrada un posicion "coord_centro" y devuelve
 # una lista con las 8 coordenadas adyacentes, en sentido horario, empezando
 # por el casillero superior izquierdo
+
 
 def mis_vecinos(coord_centro):
 
@@ -43,6 +47,7 @@ def mis_vecinos(coord_centro):
 # Funcion que toma 3 parametros, "tablero" , centro de busqueda "coord_centro" y "objetivo"
 # que busca un tipo de valor del casillero
 # si no existiera dicho objetivo buscado, devuelve una lista vacia
+
 
 def buscar_adyacente(tablero, coord_centro, objetivo):
 
@@ -78,12 +83,13 @@ def fase_mover(tablero):
         if tablero[coord_centro] == "L" or tablero[coord_centro] == "A":
             letra = tablero[coord_centro]
             w = buscar_adyacente(tablero, coord_centro, objetivo)
-            tablero[w[0]] = letra
-            tablero[coord_centro] = '-'
+            if len(w) != 0:
+                tablero[w[0]] = letra
+                tablero[coord_centro] = '-'
     return tablero
 
 
-print("\n Movimiento \n {}".format(fase_mover(tablero)))
+# print("\n Movimiento \n \n{}".format(fase_mover(tablero)))
 
 
 def fase_alimentacion(tablero):
@@ -92,12 +98,13 @@ def fase_alimentacion(tablero):
         if tablero[coord_centro] == "L":
             letra = tablero[coord_centro]
             w = buscar_adyacente(tablero, coord_centro, objetivo)
-            tablero[w[0]] = letra
-            tablero[coord_centro] = '-'
+            if len(w) != 0:
+                tablero[w[0]] = letra
+                tablero[coord_centro] = '-'
     return tablero
 
 
-print("\n Alimentacion \n {}".format(fase_alimentacion(tablero)))
+# print("\n Alimentacion \n \n {}".format(fase_alimentacion(tablero)))
 
 
 def fase_reproduccion(tablero):
@@ -119,4 +126,23 @@ def fase_reproduccion(tablero):
 
     return tablero
 
-print("\n Reproduccion \n {}".format(fase_reproduccion(tablero)))
+# print("\n Reproduccion \n \n {}".format(fase_reproduccion(tablero)))
+
+
+def evolucionar(tablero):
+    fase_mover(tablero)
+    fase_alimentacion(tablero)
+    fase_reproduccion(tablero)
+    return tablero
+
+# print(evolucionar(tablero))
+
+
+def evolucionar_en_el_tiempo(tablero, tiempo_limite):
+    for i in range(0, tiempo_limite):
+        evolucionar(tablero)
+
+    return tablero
+
+
+print(evolucionar_en_el_tiempo(tablero, tiempo_limite=2))
