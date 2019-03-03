@@ -1,13 +1,14 @@
 import numpy as np
 import random
 import csv
+import matplotlib.pyplot as plt
 
 # Funcion que genera un tablero de "filas" filas y "columnas" columnas
 # Luego le agrega montanas en los bordes
 
 
 def generar_tablero(filas, columnas):
-
+    
     # Creamos tablero
     x = filas
     y = columnas
@@ -28,19 +29,11 @@ def generar_tablero(filas, columnas):
 
     return tablero
 
-tablero = generar_tablero(filas=4, columnas=6)
 
-# # podemos acceder a un elemento individual por su fila y columna :
-# print ( " La posicion (1,1) tiene el elemento : ", t[(1, 2)])
-# # podemos verlo con :
-# print ("la posicion (1,7) tiene el elemento :", t[(1, 2)])
-# # como el tablero tiene dos dimensiones , podemos accederlas como :
-# print (" Mi tablero tiene ", t . shape[0], "filas y", t . shape [1] , "columnas" )
+# tablero = generar_tablero(filas=4, columnas=6)
 
-# Hace que los bordes del tablero sean montanas "M" o numeros
-
-n_fila = tablero.shape[0]
-n_col = tablero.shape[1]
+# n_fila = tablero.shape[0]
+# n_col = tablero.shape[1]
 
 # Definimos la coordenadas de nuestros personajes
 # Hacer funcion que ubique "n" numero de personajes de cada tipo, por "coord"
@@ -51,6 +44,7 @@ n_col = tablero.shape[1]
 # # Los asignamos dentro del tablero
 # for i in range(len(tipo)):
 #     tablero[(x[i], y[i])] = tipo[i]
+
 
 # Funcion que toma como entrada un posicion "coord_centro" y devuelve
 # una lista con las 8 coordenadas adyacentes, en sentido horario, empezando
@@ -86,6 +80,8 @@ def buscar_adyacente(tablero, coord_centro, objetivo):
 # print(buscar_adyacente(tablero, coord_centro=(1, 2), objetivo="-"))
 
 
+# Funcion que recorre los casilleros activos del tablero
+
 def recorrer_tablero(tablero):
     n_fila = tablero.shape[0]
     n_col = tablero.shape[1]
@@ -96,8 +92,13 @@ def recorrer_tablero(tablero):
             centros.append(coord_centro)
     return centros
 
-print(recorrer_tablero(tablero))
+# print(recorrer_tablero(tablero))
 
+
+# Funcion que define el movimiento de cada personaje.
+# 1º se fija si hay un personaje en el centro
+# 2º busca si hay un lugar vacio adyacente
+# 3º Mueve el personaje a ese lugar y lo borra del lugar anterior
 
 def fase_mover(tablero):
     objetivo = "-"
@@ -105,14 +106,17 @@ def fase_mover(tablero):
         if tablero[coord_centro] == "L" or tablero[coord_centro] == "A":
             letra = tablero[coord_centro]
             w = buscar_adyacente(tablero, coord_centro, objetivo)
+            print(coord_centro)
+            print(w)
             if len(w) != 0:
                 tablero[w[0]] = letra
                 tablero[coord_centro] = '-'
     return tablero
 
-
 # print("\n Movimiento \n \n{}".format(fase_mover(tablero)))
 
+# Funcion para la alimentacion de los leones
+# Busca leon, y si hay un A adyacente lo mueve a esa pos
 
 def fase_alimentacion(tablero):
     objetivo = "A"
@@ -128,6 +132,11 @@ def fase_alimentacion(tablero):
 
 # print("\n Alimentacion \n \n {}".format(fase_alimentacion(tablero)))
 
+# Funcion para la reproduccion de los personajes
+# 1º busca si el personaje es antilope o leon
+# 2º se fija si hay un personaje del mismo tipo en la cercania
+# 3º se fija si hay un lugar vacio en la cercania, y produce ese personaje
+# 4º de no haberlo no se reproduce
 
 def fase_reproduccion(tablero):
 
@@ -169,19 +178,25 @@ def fase_reproduccion(tablero):
 # print("\n Reproduccion \n \n {}".format(fase_reproduccion(tablero)))
 
 
+# Funcion que define el orden de las fases
+
 def evolucionar(tablero):
 
     tablero = fase_alimentacion(tablero)
-    # print "\n Ali \n {}".format(tablero)
+    print("A{}".format(tablero))
+    # print("\n Ali \n {}".format(tablero))
     tablero = fase_reproduccion(tablero)
-    # print "\n Repr \n {}".format(tablero)
+    print("R {}".format(tablero))
+    # print("\n Repr \n {}".format(tablero))
     tablero = fase_mover(tablero)
-    # print "\n Mover \n {}".format(tablero)
+    print("M {}".format(tablero))
+    # print("\n Mover \n {}".format(tablero))
 
     return tablero
 
 # print(evolucionar(tablero))
 
+# Funcion que define un tiempo limite de evolucion
 
 def evolucionar_en_el_tiempo(tablero, tiempo_limite):
     for i in range(0, tiempo_limite):
@@ -189,17 +204,17 @@ def evolucionar_en_el_tiempo(tablero, tiempo_limite):
 
     return tablero
 
-
 # print(evolucionar_en_el_tiempo(tablero, tiempo_limite=1))
 
+
+### Funciones que cuentan cuantos personajes o lugares vacios hay
 
 def cuantos_antilopes(tablero):
     count = 0
     for coord_centro in recorrer_tablero(tablero):
         if tablero[coord_centro] == "A":
             count += 1
-    if count == 0:
-        print "No hay antilopes"
+
     # print "\n hay {} antilopes".format(count)
     return count
 
@@ -211,7 +226,7 @@ def cuantos_leones(tablero):
         if tablero[coord_centro] == "L":
             count += 1
     if count == 0:
-        print "No hay leones"
+         print ("No hay leones")
     # print "\n Hay {} leones.".format(count)
     return count
 
@@ -223,21 +238,28 @@ def cuantos_vacios(tablero):
         if tablero[coord_centro] == "-":
             num += 1
     if num == 0:
-        print "\n No hay lugares vacios"
+        print ("\n No hay lugares vacios")
     else:
-        print "\n Hay {} lugares vacios".format(num)
+        print ("\n Hay {} lugares vacios".format(num))
     return num
 
 # print cuantos_vacios(tablero)
 
+# Funcion que devuelve una lista con 1ºnº A, 2ºnº de L
 def cuantos_de_cada(tablero):
     l1 = []
     l1.append(cuantos_antilopes(tablero))
     l1.append(cuantos_leones(tablero))
+    print("A : {} ; L : {}".format(cuantos_antilopes(tablero),
+                                   cuantos_leones(tablero)))
 
     return l1
 
 # print cuantos(tablero)
+
+
+# Funcion que devuelve una lista de posiciones activas de un tablero,
+# al azar
 
 def mezclar_celdas(tablero):
     celdas = []
@@ -252,63 +274,76 @@ def mezclar_celdas(tablero):
 
 # print mezclar_celdas(tablero)
 
-# Funcion que genera un tablero al azar
 
+# Funcion que genera un tablero con personajes, filas y columnas
+# deseadas, y posiciona los personajes al azar
 
 def generar_tablero_azar(filas, columnas, n_antilopes, n_leones):
 
     tab = generar_tablero(filas, columnas)
     azar = mezclar_celdas(tab)
-    # print azar
     for i in azar[:n_antilopes]:
         n = 0
         while n < n_antilopes:
             n += 1
             tab[i] = 'A'
-    # print azar[:n_antilopes]
     for s in azar[n_antilopes:n_antilopes+n_leones]:
         l = 0
         while l < n_leones:
             l += 1
             tab[s] = 'L'
-    # print azar[n_antilopes:n_antilopes+n_leones]
     return tab
 
-# print cuantos_de_cada(tablero1)
+
+tablero = generar_tablero_azar(filas=5, columnas=5,
+                                n_antilopes=3, n_leones=2)
+print(tablero)
 
 
-tablerox = generar_tablero_azar(filas=10, columnas=6, n_antilopes=10, n_leones=2)
-print tablerox
+# Funcion que devuelve una lista, con cuantos A y L
+# quedaron luego de cada ciclo hasta un tiempo limite
 
-
-def registrar_evolucion(tablerox, tiempo_limite):
+def registrar_evolucion(tablero, tiempo_limite):
     n = 0
-    l2 = [cuantos_de_cada(tablerox)]
+    l2 = [cuantos_de_cada(tablero)]
 
     while n < tiempo_limite:
         n += 1
-        evolucionar_en_el_tiempo(tablerox, tiempo_limite)
-        l2.append(cuantos_de_cada(tablerox))
+        print("\n Ciclo {} ".format(n))
+        print(evolucionar_en_el_tiempo(tablero, tiempo_limite))
+        l2.append(cuantos_de_cada(tablero))
+        x = l2[-1]
+        y = x[0]
+        z = x[1]
+        print(tablero)
+
+        if y == 0 or z == 0:
+            print("\n Se acabó la diversidad en el ciclo {} \n".format(n))
+            break
+
     return l2
 
-print(registrar_evolucion(tablerox, tiempo_limite=100))
 
+z = (registrar_evolucion(tablero, tiempo_limite=2))
+print(z)
 
 # print tablero
 # print("\n Alimentacion \n \n {}".format(fase_alimentacion(tablero)))
 # print("\n Reproduccion \n \n {}".format(fase_reproduccion(tablero)))
 # print("\n Movimiento \n \n{}".format(fase_mover(tablero)))
 
+plt.plot(z)
+plt.show()
+
+registro = z
+print(registro)
 
 
 
-
-
-
-
-
-
-
+with open('predpres.csv', 'w', newline="") as csvfile:
+    file_writer = csv.writer(csvfile)
+    file_writer.writerow(["antilopes", "leones"])
+    file_writer.writerows(registro)
 
 
 
