@@ -3,9 +3,9 @@ import random
 import csv
 import matplotlib.pyplot as plt
 
+
 # Funcion que genera un tablero de "filas" filas y "columnas" columnas
 # Luego le agrega montanas en los bordes
-
 
 def generar_tablero(filas, columnas):
     
@@ -50,7 +50,6 @@ def generar_tablero(filas, columnas):
 # una lista con las 8 coordenadas adyacentes, en sentido horario, empezando
 # por el casillero superior izquierdo
 
-
 def mis_vecinos(coord_centro):
 
     c = coord_centro[1]
@@ -60,7 +59,6 @@ def mis_vecinos(coord_centro):
                      (f+1, c-1), (f, c-1)]
     return coord_vecinas
 
-# print(mis_vecinos(coord_centro=(3, 3)))
 
 # Funcion que toma 3 parametros, "tablero" , centro de busqueda "coord_centro" y "objetivo"
 # que busca un tipo de valor del casillero
@@ -75,9 +73,6 @@ def buscar_adyacente(tablero, coord_centro, objetivo):
             adyacente.append(i)
             return adyacente
     return []
-
-
-# print(buscar_adyacente(tablero, coord_centro=(1, 2), objetivo="-"))
 
 
 # Funcion que recorre los casilleros activos del tablero
@@ -116,7 +111,7 @@ def fase_mover(tablero):
 # print("\n Movimiento \n \n{}".format(fase_mover(tablero)))
 
 # Funcion para la alimentacion de los leones
-# Busca leon, y si hay un A adyacente lo mueve a esa pos
+# Busca leon y si hay un A adyacente lo mueve a esa pos
 
 def fase_alimentacion(tablero):
     objetivo = "A"
@@ -255,8 +250,6 @@ def cuantos_de_cada(tablero):
 
     return l1
 
-# print cuantos(tablero)
-
 
 # Funcion que devuelve una lista de posiciones activas de un tablero,
 # al azar
@@ -299,7 +292,6 @@ tablero = generar_tablero_azar(filas=5, columnas=5,
                                 n_antilopes=3, n_leones=2)
 print(tablero)
 
-
 # Funcion que devuelve una lista, con cuantos A y L
 # quedaron luego de cada ciclo hasta un tiempo limite
 
@@ -338,22 +330,12 @@ plt.show()
 registro = z
 print(registro)
 
-
+# Crea un tabla en un archivo llamado predpres, que toma con datos
+# la cantidad de A y de L luego de cada turno
 
 with open('predpres.csv', 'w', newline="") as csvfile:
     file_writer = csv.writer(csvfile)
     file_writer.writerow(["antilopes", "leones"])
     file_writer.writerows(registro)
-
-
-
-
-
-
-
-
-
-
-
 
 
