@@ -32,8 +32,8 @@ def generar_tablero(filas, columnas):
 
 # tablero = generar_tablero(filas=4, columnas=6)
 
-# n_fila = tablero.shape[0]
-# n_col = tablero.shape[1]
+# n_fila = tablero.shape[0] ## elige la fila como primer valor
+# n_col = tablero.shape[1] ## columna como segundo
 
 # Definimos la coordenadas de nuestros personajes
 # Hacer funcion que ubique "n" numero de personajes de cada tipo, por "coord"
@@ -87,8 +87,6 @@ def recorrer_tablero(tablero):
             centros.append(coord_centro)
     return centros
 
-# print(recorrer_tablero(tablero))
-
 
 # Funcion que define el movimiento de cada personaje.
 # 1º se fija si hay un personaje en el centro
@@ -123,7 +121,6 @@ def fase_alimentacion(tablero):
                 tablero[w[0]] = letra
                 tablero[coord_centro] = '-'
     return tablero
-
 
 # print("\n Alimentacion \n \n {}".format(fase_alimentacion(tablero)))
 
@@ -189,7 +186,6 @@ def evolucionar(tablero):
 
     return tablero
 
-# print(evolucionar(tablero))
 
 # Funcion que define un tiempo limite de evolucion
 
@@ -213,7 +209,6 @@ def cuantos_antilopes(tablero):
     # print "\n hay {} antilopes".format(count)
     return count
 
-# print cuantos_antilopes(tablero)
 
 def cuantos_leones(tablero):
     count = 0
@@ -225,7 +220,6 @@ def cuantos_leones(tablero):
     # print "\n Hay {} leones.".format(count)
     return count
 
-# print cuantos_leones(tablero)
 
 def cuantos_vacios(tablero):
     num = 0
@@ -238,7 +232,8 @@ def cuantos_vacios(tablero):
         print ("\n Hay {} lugares vacios".format(num))
     return num
 
-# print cuantos_vacios(tablero)
+###
+
 
 # Funcion que devuelve una lista con 1ºnº A, 2ºnº de L
 def cuantos_de_cada(tablero):
@@ -265,8 +260,6 @@ def mezclar_celdas(tablero):
     random . shuffle(celdas)
     return celdas
 
-# print mezclar_celdas(tablero)
-
 
 # Funcion que genera un tablero con personajes, filas y columnas
 # deseadas, y posiciona los personajes al azar
@@ -290,7 +283,6 @@ def generar_tablero_azar(filas, columnas, n_antilopes, n_leones):
 
 tablero = generar_tablero_azar(filas=5, columnas=5,
                                 n_antilopes=3, n_leones=2)
-print(tablero)
 
 # Funcion que devuelve una lista, con cuantos A y L
 # quedaron luego de cada ciclo hasta un tiempo limite
@@ -317,23 +309,17 @@ def registrar_evolucion(tablero, tiempo_limite):
 
 
 z = (registrar_evolucion(tablero, tiempo_limite=2))
-print(z)
-
-# print tablero
-# print("\n Alimentacion \n \n {}".format(fase_alimentacion(tablero)))
-# print("\n Reproduccion \n \n {}".format(fase_reproduccion(tablero)))
-# print("\n Movimiento \n \n{}".format(fase_mover(tablero)))
 
 plt.plot(z)
 plt.show()
 
 registro = z
-print(registro)
+
 
 # Crea un tabla en un archivo llamado predpres, que toma con datos
 # la cantidad de A y de L luego de cada turno
 
-with open('predpres.csv', 'w', newline="") as csvfile:
+with open("predpres.csv", "w", newline="") as csvfile:
     file_writer = csv.writer(csvfile)
     file_writer.writerow(["antilopes", "leones"])
     file_writer.writerows(registro)
