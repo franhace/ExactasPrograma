@@ -254,7 +254,6 @@ def mezclar_celdas(tablero):
 
 # Funcion que genera un tablero al azar
 
-
 def generar_tablero_azar(filas, columnas, n_antilopes, n_leones):
 
     tab = generar_tablero(filas, columnas)
