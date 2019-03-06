@@ -1,10 +1,10 @@
 import pygame
 import time
-
+import AntilopeVsDepredador
 import numpy as np
 
 # pred_presa = __import__('05-solucion-predador_presa')
-pred_presa = __import__('predpresa')
+pred_presa = AntilopeVsDepredador
 # para instalar pygame:
 # python3 -m pip install -U pygame --user
 
