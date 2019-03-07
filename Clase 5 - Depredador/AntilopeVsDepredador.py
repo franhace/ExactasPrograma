@@ -261,9 +261,12 @@ def mezclar_celdas(tablero):
     return celdas
 
 
+<<<<<<< HEAD
+=======
 # Funcion que genera un tablero con personajes, filas y columnas
 # deseadas, y posiciona los personajes al azar
 
+>>>>>>> c9a90db4c69d8f457794b2aa7e0a65e58077ad79
 def generar_tablero_azar(filas, columnas, n_antilopes, n_leones):
 
     tab = generar_tablero(filas, columnas)
