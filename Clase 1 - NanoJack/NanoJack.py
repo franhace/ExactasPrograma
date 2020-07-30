@@ -1,4 +1,5 @@
 import random
+import matplotlib.pyplot as plt
 
 # Funcion que genera un mazo de 52 cartas
 
@@ -122,13 +123,9 @@ print(statistics.mean(puntaje_por_jugador(jugamos)))
 ## Vemos si lista contiene listas,
 # ya que estaria bueno ver un puntaje final x jugador
 print(any(isinstance(el, list) for el in jugamos))
-import matplotlib.pyplot as plt
-import numpy as np
-import scipy.stats as st
 
 
 plt.hist(jugamos[0])
-#axis([xmin,xmax,ymin,ymax])
 plt.xlabel('Puntaje')
 plt.ylabel('Apariciones')
 plt.show()
