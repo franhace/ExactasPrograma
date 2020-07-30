@@ -106,21 +106,31 @@ def experimentar(n, rep):
     i = 0
     while i < rep:
         for jugador in range(n):
+            i += 1
             mazo = generar_mazos(1)
             x = jugar_varios(mazo, n)
-
-
-            i += 1
             lists[jugador].extend(x)
-            # print("jugador {} {} puntos ".format(i, s))
 
     return lists
 
 
-ress = experimentar(2, 10)
-print((ress))
-print(puntaje_por_jugador(ress))
+jugamos = experimentar(1, 1000)
+print((jugamos))
+import statistics
+print(statistics.mean(puntaje_por_jugador(jugamos)))
 
 ## Vemos si lista contiene listas,
 # ya que estaria bueno ver un puntaje final x jugador
-print(any(isinstance(el, list) for el in ress))
+print(any(isinstance(el, list) for el in jugamos))
+import matplotlib.pyplot as plt
+import numpy as np
+import scipy.stats as st
+
+
+plt.hist(jugamos[0])
+#axis([xmin,xmax,ymin,ymax])
+plt.xlabel('Puntaje')
+plt.ylabel('Apariciones')
+plt.show()
+
+# https://pasteboard.co/Jk5SAaz.png
