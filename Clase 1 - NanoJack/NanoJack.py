@@ -1,8 +1,5 @@
 import random
 
-n = 2
-
-
 # Funcion que genera un mazo de 52 cartas
 
 def crear_mazo():
@@ -10,8 +7,8 @@ def crear_mazo():
     a = 0
     cartas = []
     while a < 4:
-        for car in range(1, 14):
-            cartas.append(car)
+        for carta in range(1, 14):
+            cartas.append(carta)
         a = a + 1
     return cartas
 
@@ -33,11 +30,9 @@ def generar_mazos(n):
     random.shuffle(mazo_mezclado)
     return mazo_mezclado
 
-# Mazo
-m = generar_mazos(n)
-
 
 # Funcion que toma cartas del mazo(m) hasta que el valor sea superior o igual a 21
+
 
 def jugar(m):
 
@@ -56,21 +51,7 @@ def jugar(m):
             s = s + r  # suma carta seleccionada al puntaje total
             cartas_sacadas.append(r)
 
-
-        # print(cartas_sacadas)
-        # print(s)
         return s  # puntaje final
-
-
-# s = jugar(m)
-# print(s)
-print("numero de cartas: {}".format(len(m)))
-# print(len(m))
-
-
-# Numero de jugadores
-
-j = 3
 
 
 # Funcion que juega con "j" jugadores, con el mazo "m"
@@ -86,75 +67,60 @@ def jugar_varios(m, j):
     return resultados
 
 
-resultados = jugar_varios(m, j)
-print("resultados: {}".format(resultados))
-
-
 # Funcion que se fija quien gano y devulve 1 en caso positivo
 
 def ver_quien_gano(resultados):
-
     l1 = []
-
-    for c in resultados:
-        #print(c) # muestra el resultado
-
-        if c == 21:
+    for jugador, resultado in enumerate(resultados):
+        if resultado == 21:
             s = 1
             l1.append(s)
+            print("jugador {} ganó".format(jugador+1))
         else:
             s = 0
             l1.append(s)
+            print("jugador {} perdió".format(jugador+1))
+
     return l1
 
 
-y = ver_quien_gano(resultados)
-# print(ver_quien_gano(resultados))
+# Devuelve cantidad de veces que el jugador saco 21 puntos
+def puntaje_total_jugador(lista_resultados):
+    puntaje = lista_resultados.count(21)
+    return puntaje
 
-#
-# # Funcion que juega "rep" veces con "n" jugadores y devuelve cuantas veces gano cada uno
 
-rep = 2  # num de veces que juega cada jugador
-n = 5  # num de jugadores
+# Devuelve cantidad de veces que cada jugador saco 21 puntos
+def puntaje_por_jugador(res_experimentar):
+    lista_puntajes = []
+    for i in res_experimentar:
+        lista_puntajes.append(puntaje_total_jugador(i))
+    return lista_puntajes
 
-r = jugar_varios(m, rep)
-y2 = ver_quien_gano(r)
-print("r: {}".format(r))
 
 # Funcion que toma n jugadores ,  los hace jugar rep veces y devuelve cuantas veces gano/perdio c/u
 
 def experimentar(n, rep):
 
-    l1 = []
-    l2 = []
+    lists = [[] for _ in range(n)]
     i = 0
-    s = []
-    # while i < rep:
-    #     l1.append(y2)
-    #     i += 1
-    #     while s < n:
-    #         l2.append(r)
-    #         s += 1
-    count = 0
-    for c in range(n):
-        l1.append(r)
+    while i < rep:
+        for jugador in range(n):
+            mazo = generar_mazos(1)
+            x = jugar_varios(mazo, n)
 
-        while i < rep :
-            l2.append(r)
 
             i += 1
-            print("jugador {} {} puntos ".format(i, s))
+            lists[jugador].extend(x)
+            # print("jugador {} {} puntos ".format(i, s))
+
+    return lists
 
 
-    print("l1: {}".format(l1))
-    print("l2: {}".format(l2))
-    return l2
+ress = experimentar(2, 10)
+print((ress))
+print(puntaje_por_jugador(ress))
 
-
-# print(r)
-print(experimentar(n, rep))
-print("numero de cartas: {}".format(len(m)))
-
-#
-# # falta un return que devuelva el resultado 0 o 1
-
+## Vemos si lista contiene listas,
+# ya que estaria bueno ver un puntaje final x jugador
+print(any(isinstance(el, list) for el in ress))

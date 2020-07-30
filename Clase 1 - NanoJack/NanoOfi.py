@@ -24,3 +24,5 @@ def jugar(m):
         puntos += c
 
     return puntos
+
+print(jugar(s))
