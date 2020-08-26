@@ -44,48 +44,16 @@ sherlock_limpio = limpio_texto(texto_sherlock)
 x = (sherlock_limpio.split())
 censuradas = ('is', 'in', 'a', 'the')
 w = generar_dict_filt(palabras_separadas=x, palabras_filtro=censuradas,n=5,r=0)
-print(w)
+# print(w)
 
-wordcloud = WordCloud(width=480, height=480, margin=0)
-wordcloud.generate_from_frequencies(w)
-plt.imshow(wordcloud, interpolation='bilinear')
-plt.axis("off")
-plt.margins(x=0, y=0)
-plt.show()
-
-###### MT #####
-
-# import docx
-#
-#
-# def readDocx(doc):
-#     try:
-#         doc = docx.Document('{}'.format(doc))  # Creating word reader object.
-#         data = ""
-#         fullText = []
-#         for para in doc.paragraphs:
-#             fullText.append(para.text)
-#             data = '\n'.join(fullText)
-#
-#         return(data)
-#
-#     except IOError:
-#         print('There was an error opening the file!')
-#         return
-# mt0 = readDocx(archivo)
-# # print(mt0)
-#
-# mt = (mt0.split())
-# freq_pals2 = dict(Counter(mt))
-# print(freq_pals2)
-#
-# censuradas_mt = ('que', 'y', 'a', 'en')
-# z = generar_dict_filt(palabras_separadas=mt, palabras_filtro=censuradas_mt, n=0, r=2)
-#
-#
 # wordcloud = WordCloud(width=480, height=480, margin=0)
-# wordcloud.generate_from_frequencies(z)
+# wordcloud.generate_from_frequencies(w)
 # plt.imshow(wordcloud, interpolation='bilinear')
 # plt.axis("off")
 # plt.margins(x=0, y=0)
 # plt.show()
+
+###### MT #####
+
+
+
