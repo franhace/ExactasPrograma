@@ -1,7 +1,7 @@
 import re
-from collections import Counter
-
+import requests
 import html2text
+from collections import Counter
 import matplotlib.pyplot as plt
 from wordcloud import WordCloud
 
@@ -45,7 +45,8 @@ def generar_dict_filt(palabras_separadas, palabras_filtro,n,r):
 sherlock_limpio = limpio_texto(texto_sherlock)
 x = (sherlock_limpio.split())
 censuradas = ('is', 'in', 'a', 'the')
-w = generar_dict_filt(palabras_separadas=x, palabras_filtro=censuradas,n=5,r=0)
+w = generar_dict_filt(palabras_separadas=x, palabras_filtro=censuradas,
+                      n=5, r=0)
 # print(w)
 
 # wordcloud = WordCloud(width=480, height=480, margin=0)
@@ -57,8 +58,6 @@ w = generar_dict_filt(palabras_separadas=x, palabras_filtro=censuradas,n=5,r=0)
 
 # 9
 # vamos a hacer lo mismo con 4 obras literarias
-import requests
-
 
 def limpio_html(link,nombre_elegido):
     # nos bajamos el archivo
@@ -106,8 +105,8 @@ def muestro_wordcloud_link(link,nombre_elegido,
 link_estudio_escarlata ='https://www.gutenberg.org/files/244/244-h/244-h.htm'
 censored = ('gutenberg', 'Gutenberg-tm', 'the', 'all', 'just', 'being', 'over', 'both', 'through', 'yourselves', 'its', 'before', 'herself', 'had', 'should', 'to', 'only', 'under', 'ours', 'has', 'do', 'them', 'his', 'very', 'they', 'not', 'during', 'now', 'him', 'nor', 'did', 'this', 'she', 'each', 'further', 'where', 'few', 'because', 'doing', 'some', 'are', 'our', 'ourselves', 'out', 'what', 'for', 'while', 'does', 'above', 'between', 't', 'be', 'we', 'who', 'were', 'here', 'hers', 'by', 'on', 'about', 'of', 'against', 's', 'or', 'own', 'into', 'yourself', 'down', 'your', 'from', 'their', 'there', 'been', 'whom', 'too', 'themselves', 'was', 'until', 'more', 'himself', 'that', 'but', 'don', 'with', 'than', 'those', 'me', 'myself', 'these', 'up', 'will', 'below', 'can', 'theirs', 'my', 'and', 'then', 'is', 'am', 'it', 'an', 'as', 'itself', 'at', 'have', 'in', 'any', 'if', 'again', 'no', 'when', 'same', 'how', 'other', 'which', 'you', 'after', 'most', 'such', 'why', 'a', 'off', 'i', 'yours', 'so', 'the', 'having', 'once')
 
-asd = muestro_wordcloud_link(link=link_estudio_escarlata,
+estudio_escarlata = muestro_wordcloud_link(link=link_estudio_escarlata,
                              nombre_elegido='ElSherlo',
                              palabras_filtro=censored,
                              n=5, r=0)
-print(asd)
+print(estudio_escarlata)
