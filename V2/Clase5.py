@@ -32,6 +32,7 @@ def generar_dict_filt(palabras_separadas, palabras_filtro,n,r):
 
         # lo ordenamos
         dict_2 = {k: v for k, v in sorted(dict_1.items(), key=lambda item: item[1])}
+        print(dict_2)
 
         # eligimos las que tengan una frec >= r
         if r > 0:
@@ -59,14 +60,33 @@ w = generar_dict_filt(palabras_separadas=x, palabras_filtro=censuradas,
 # 9
 # vamos a hacer lo mismo con 4 obras literarias
 
-def limpio_html(link,nombre_elegido):
-    # nos bajamos el archivo
+from bs4 import BeautifulSoup
+from urllib.request import urlopen
+
+def titulo_limpio(link):
+    # buscamos el titulo
+    r = urlopen(link)
+    soup = BeautifulSoup(r, "html.parser")
+    title = soup.title.string
+
+    # limpiamos limpiamos
+    rx = re.compile('\W+')
+    res = rx.sub(' ', title).strip()
+    titulo = "_".join(res.split())
+    return titulo
+
+
+def limpio_html(link):
+    # obtenemos el titulo
+    titulo = titulo_limpio(link)
+
+    # nos bajamos el archivo y lo guardamos con el titulo
     r = requests.get(link)
-    with open('{}.htm'.format(nombre_elegido), 'wb') as f_html:
+    with open('./archivos/{}.htm'.format(titulo), 'wb') as f_html:
         f_html.write(r.content)
 
     # lo leemos
-    with open('{}.htm'.format(nombre_elegido), 'r') as f_h:
+    with open('./archivos/{}.htm'.format(titulo), 'r') as f_h:
         f_down = f_h.read()
 
     # eliminamos los tags html
@@ -78,35 +98,63 @@ def limpio_html(link,nombre_elegido):
     # dependiendo el caso deberiamos tener numeros tmb
     # entre otros caracteres
     semi_limpio2 = limpio_texto(semi_limpio)
+
     return semi_limpio2
 
-def limpito_separo_palabras(link,nombre_elegido):
-    limpiado = limpio_html(link, nombre_elegido)
+def limpito_separo_palabras(link,):
+    limpiado = limpio_html(link, )
     apalabrado = (limpiado.split())
     return apalabrado
 
-# nos muestra el cloud de un link
+# Funcion que nos muestra el cloud de un link
 # nombre_elegido: nombre elegido para el archivo
 # palabras_filtro: palabras que no nos interesa trackear
 # n : num max de palabras
 # r : umbral minimo de repeticiones para tomar palabra
-def muestro_wordcloud_link(link,nombre_elegido,
+def muestro_wordcloud_link(link,
                            palabras_filtro,
                            n, r):
-    en_palabras = limpito_separo_palabras(link,nombre_elegido)
+    titulo = titulo_limpio(link)
+    en_palabras = limpito_separo_palabras(link)
     final = generar_dict_filt(en_palabras,palabras_filtro, n, r)
     wordcloud = WordCloud(width=480, height=480, margin=0)
     wordcloud.generate_from_frequencies(final)
     plt.imshow(wordcloud, interpolation='bilinear')
     plt.axis("off")
     plt.margins(x=0, y=0)
-    return plt.show()
+    plt.savefig('./img/{}.png'.format(titulo))
+    # return plt.show()
 
 link_estudio_escarlata ='https://www.gutenberg.org/files/244/244-h/244-h.htm'
+link_agatha = 'http://www.gutenberg.org/files/58866/58866-h/58866-h.htm'
+link_chesterton = 'http://www.gutenberg.org/files/1695/1695-h/1695-h.htm'
+link_sayers = 'http://www.gutenberg.org/files/58820/58820-h/58820-h.htm'
 censored = ('gutenberg', 'Gutenberg-tm', 'the', 'all', 'just', 'being', 'over', 'both', 'through', 'yourselves', 'its', 'before', 'herself', 'had', 'should', 'to', 'only', 'under', 'ours', 'has', 'do', 'them', 'his', 'very', 'they', 'not', 'during', 'now', 'him', 'nor', 'did', 'this', 'she', 'each', 'further', 'where', 'few', 'because', 'doing', 'some', 'are', 'our', 'ourselves', 'out', 'what', 'for', 'while', 'does', 'above', 'between', 't', 'be', 'we', 'who', 'were', 'here', 'hers', 'by', 'on', 'about', 'of', 'against', 's', 'or', 'own', 'into', 'yourself', 'down', 'your', 'from', 'their', 'there', 'been', 'whom', 'too', 'themselves', 'was', 'until', 'more', 'himself', 'that', 'but', 'don', 'with', 'than', 'those', 'me', 'myself', 'these', 'up', 'will', 'below', 'can', 'theirs', 'my', 'and', 'then', 'is', 'am', 'it', 'an', 'as', 'itself', 'at', 'have', 'in', 'any', 'if', 'again', 'no', 'when', 'same', 'how', 'other', 'which', 'you', 'after', 'most', 'such', 'why', 'a', 'off', 'i', 'yours', 'so', 'the', 'having', 'once')
 
-estudio_escarlata = muestro_wordcloud_link(link=link_estudio_escarlata,
-                             nombre_elegido='ElSherlo',
-                             palabras_filtro=censored,
-                             n=5, r=0)
-print(estudio_escarlata)
+# estudio_escarlata = muestro_wordcloud_link(link=link_estudio_escarlata,
+#                              palabras_filtro=censored,
+#                              n=5, r=0)
+
+# print(estudio_escarlata)
+
+
+# Lo hacemos para una lista de links
+def word_clouds(lista_links, palabras_filtro,n, r):
+    for i in lista_links:
+        print(muestro_wordcloud_link(i, palabras_filtro, n, r))
+
+links = []
+links.extend((link_agatha, link_sayers, link_chesterton, link_estudio_escarlata))
+
+# print(word_clouds(lista_links=links, palabras_filtro=censored,n=50, r=20))
+
+
+# 10
+
+link_articulos = []
+link1 = 'https://doi.org/10.1371/journal.pone.0005738'
+link2 = 'https://doi.org/10.1109/LRA.2020.2966414'
+link3 = 'https://doi.org/10.1371/journal.pone.0108895'
+link_articulos.extend((link1,link2,link3))
+
+print(word_clouds(lista_links=link_articulos, palabras_filtro=censored,n=20, r=0))
